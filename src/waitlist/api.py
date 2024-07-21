@@ -17,9 +17,7 @@ def list_waitlist_entries(request):
 # /api/waitlist
 @router.post("", response=WaitlistEntryDetailSchema, auth=helpers.api_auth_user_or_annon)
 def create_waitlist_entry(request, data:WaitlistEntryCreateSchema):
-    ##print(data)
     obj =  WaitlistEntry(**data.dict())
-    #print(request.user)
     if request.user.is_authenticated:
         obj.user = request.user
     obj.save()
