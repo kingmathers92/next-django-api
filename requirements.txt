@@ -2,6 +2,8 @@ Django
 django-ninja
 django-cors-headers
 django-ninja-jwt[crypto]
+dj-database-url
+psycopg[binary]
 pydantic[email]
 python-decouple
 rav

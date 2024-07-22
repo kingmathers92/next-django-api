@@ -33,7 +33,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,6 +97,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASE_URL = config("DB_URL", cast=str, default=None)
+
+if DATABASE_URL is not None:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=300,
+            conn_health_checks=True
+        )
+    }
+
+
 
 
 # Password validation
