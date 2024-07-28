@@ -26,3 +26,10 @@ class WaitlistEntryDetailSchema(Schema):
     email: EmailStr
     updated: datetime
     timestamp: datetime
+
+
+class WaitlistEntryUpdateSchema(Schema):
+    # Put -> Data
+    # WaitlistEntryOut
+    # id: int
+    description: str = ""
