@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, Optional
 from datetime import datetime
 from ninja import Schema
 from pydantic import EmailStr
@@ -26,3 +26,9 @@ class WaitlistEntryDetailSchema(Schema):
     email: EmailStr
     updated: datetime
     timestamp: datetime
+    description: Optional[str] = ""
+class WaitlistEntryUpdateSchema(Schema):
+    # PUT -> data
+    # waitlistEntryOut
+    id: int
+    description: str = ""
