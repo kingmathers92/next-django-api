@@ -18,6 +18,7 @@ class WaitlistEntryListSchema(Schema):
     # waitlistEntryOut
     id: int
     email: EmailStr
+    description: Optional[str] = ""
 
 class WaitlistEntryDetailSchema(Schema):
     # Get - data
