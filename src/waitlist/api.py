@@ -41,7 +41,7 @@ def create_waitlist_entry(request, data:WaitlistEntryCreateSchema):
     return 201, obj
 
 
-@router.get("{entry_id}", response=WaitlistEntryDetailSchema)
+@router.get("{entry_id}/", response=WaitlistEntryDetailSchema, auth=helpers.api_auth_user_required)
 def get_waitlist_entry(request, entry_id:int):
     obj = get_object_or_404(
         WaitlistEntry,
