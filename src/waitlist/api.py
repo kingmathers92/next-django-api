@@ -1,5 +1,6 @@
 from typing import List
 import json
+from allauth.account.forms import SignupForm
 from django.shortcuts import get_object_or_404
 from ninja import Router
 import helpers
@@ -15,6 +16,23 @@ from .schemas import (
 )
 
 router = Router()
+
+@router.post("/signup")
+def signup(request, username: str, email: str, password: str):
+    form = SignupForm(data={
+        'username': username,
+        'email': email,
+        'password1': password,  # Ensure 'password1' is used for signup
+        'password2': password,  # Confirm password if required
+    })
+    if form.is_valid():
+        user = form.save(request)
+        return {
+            'username': user.username,
+            'email': user.email,
+            'id': user.id
+        }
+    return {'errors': form.errors}
 
 # /api/waitlist
 @router.get("", response=List[WaitlistEntryListSchema], auth=helpers.api_auth_user_required)

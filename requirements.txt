@@ -7,3 +7,4 @@ psycopg[binary]
 pydantic[email]
 python-decouple
 rav
+requests

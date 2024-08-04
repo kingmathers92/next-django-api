@@ -44,12 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     # internal
     "waitlist",
     # third party
     "corsheaders",
     "ninja_extra",
     "jwt",
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -61,11 +64,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'cfehome.urls'
 
-CORS_URLS_REGEX = r"^/api/.*$"
+CORS_URLS_REGEX = r"^/(api|auth)/.*$"
 CORS_ALLOWED_ORIGINS = []
 ENV_CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", cast=str, default="")
 for origin in ENV_CORS_ALLOWED_ORIGINS.split(","):
@@ -88,6 +92,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'cfehome.wsgi.application'
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Allauth settings
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 
 # Database
