@@ -3,6 +3,7 @@ import json
 from allauth.account.forms import SignupForm
 from django.shortcuts import get_object_or_404
 from ninja import Router
+from ninja.responses import Response
 import helpers
 from ninja_jwt.authentication import JWTAuth
 from .forms import WaitlistCreateForm
@@ -18,21 +19,29 @@ from .schemas import (
 router = Router()
 
 @router.post("/signup")
-def signup(request, username: str, email: str, password: str):
+def signup(request, email: str, password: str):
     form = SignupForm(data={
-        'username': username,
         'email': email,
-        'password1': password,  # Ensure 'password1' is used for signup
-        'password2': password,  # Confirm password if required
+        'password1': password,
+        'password2': password,
     })
     if form.is_valid():
         user = form.save(request)
+        print(f"User created: {user.email}")  # Debug statement
+
+        # Generate tokens
+        auth = JWTAuth()
+        access_token = auth.create_access_token(user)
+        refresh_token = auth.create_refresh_token(user)
+
         return {
-            'username': user.username,
             'email': user.email,
-            'id': user.id
+            'id': user.id,
+            'access': access_token,
+            'refresh': refresh_token,
         }
-    return {'errors': form.errors}
+    form_errors = json.loads(form.errors.as_json())
+    return 400, form_errors
 
 # /api/waitlist
 @router.get("", response=List[WaitlistEntryListSchema], auth=helpers.api_auth_user_required)
